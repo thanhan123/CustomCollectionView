@@ -13,8 +13,8 @@ class PhotoStreamViewController: UICollectionViewController {
   
   var photos = Photo.allPhotos()
   
-  override func preferredStatusBarStyle() -> UIStatusBarStyle {
-    return UIStatusBarStyle.LightContent
+  override var preferredStatusBarStyle : UIStatusBarStyle {
+    return UIStatusBarStyle.lightContent
   }
   
   override func viewDidLoad() {
@@ -27,7 +27,7 @@ class PhotoStreamViewController: UICollectionViewController {
     if let layout = collectionView?.collectionViewLayout as? PinterestLayout {
       layout.delegate = self
     }
-    collectionView!.backgroundColor = UIColor.clearColor()
+    collectionView!.backgroundColor = UIColor.clear
     collectionView!.contentInset = UIEdgeInsets(top: 23, left: 5, bottom: 10, right: 5)
   }
   
@@ -35,12 +35,13 @@ class PhotoStreamViewController: UICollectionViewController {
 
 extension PhotoStreamViewController {
   
-  override func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+  override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
     return photos.count
   }
   
-  override func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
-    let cell = collectionView.dequeueReusableCellWithReuseIdentifier("AnnotatedPhotoCell", forIndexPath: indexPath) as! AnnotatedPhotoCell
+  override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+    
+    let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "AnnotatedPhotoCell", for: indexPath) as! AnnotatedPhotoCell
     cell.photo = photos[indexPath.item]
     return cell
   }
@@ -49,15 +50,15 @@ extension PhotoStreamViewController {
 
 extension PhotoStreamViewController : PinterestLayoutDelegate {
   // 1. Returns the photo height
-  func collectionView(collectionView:UICollectionView, heightForPhotoAtIndexPath indexPath:NSIndexPath , withWidth width:CGFloat) -> CGFloat {
+  func collectionView(_ collectionView:UICollectionView, heightForPhotoAtIndexPath indexPath:IndexPath , withWidth width:CGFloat) -> CGFloat {
     let photo = photos[indexPath.item]
     let boundingRect =  CGRect(x: 0, y: 0, width: width, height: CGFloat(MAXFLOAT))
-    let rect  = AVMakeRectWithAspectRatioInsideRect(photo.image.size, boundingRect)
+    let rect  = AVMakeRect(aspectRatio: photo.image.size, insideRect: boundingRect)
     return rect.size.height
   }
   
   // 2. Returns the annotation size based on the text
-  func collectionView(collectionView: UICollectionView, heightForAnnotationAtIndexPath indexPath: NSIndexPath, withWidth width: CGFloat) -> CGFloat {
+  func collectionView(_ collectionView: UICollectionView, heightForAnnotationAtIndexPath indexPath: IndexPath, withWidth width: CGFloat) -> CGFloat {
     let annotationPadding = CGFloat(4)
     let annotationHeaderHeight = CGFloat(17)
     
